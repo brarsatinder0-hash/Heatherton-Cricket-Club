@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.heathertoncricketclub.com.au/sitemap.xml
