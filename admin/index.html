@@ -1,14 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex" />
-  <title>Heatherton CC — Admin</title>
-</head>
-<body>
-  <!-- Decap CMS (formerly Netlify CMS) — free, open-source, git-based admin panel.
-       Content edited here is saved as commits directly to the site's GitHub repo. -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-</body>
-</html>
+backend:
+  name: github
+  repo: brarsatinder0-hash/Heatherton-Cricket-Club
+  branch: main
+  base_url: https://curly-surf-114f.brarsatinder0.workers.dev
+
+media_folder: "content/uploads"
+public_folder: "/content/uploads"
+
+collections:
+  - name: "news"
+    label: "Club News"
+    description: "These cards show in the Latest from the Clubhouse section on the site."
+    files:
+      - name: "news"
+        label: "News Items"
+        file: "content/news.json"
+        fields:
+          - label: "News Items"
+            name: "items"
+            widget: "list"
+            summary: "{{title}}"
+            fields:
+              - {label: "Title", name: "title", widget: "string", hint: "Shown as the card headline"}
+              - {label: "Tag (small label, e.g. a date or category)", name: "tag", widget: "string", required: false}
+              - {label: "Excerpt", name: "excerpt", widget: "text"}
+              - {label: "Link (optional — e.g. a PlayHQ URL)", name: "link", widget: "string", required: false}
+
+  - name: "media"
+    label: "Media / Photos"
+    description: "These show as tiles in the Media section on the site."
+    files:
+      - name: "media"
+        label: "Media Items"
+        file: "content/media.json"
+        fields:
+          - label: "Media Items"
+            name: "items"
+            widget: "list"
+            summary: "{{type}} — {{caption}}"
+            fields:
+              - {label: "Type", name: "type", widget: "select", options: ["Photo", "Video"]}
+              - {label: "Image", name: "image", widget: "image", required: false, hint: "For videos, upload a thumbnail image"}
+              - {label: "Caption", name: "caption", widget: "string", required: false}
