@@ -1,0 +1,59 @@
+## Heatherton CC — Admin (Decap CMS) config
+## ------------------------------------------------------------------
+## SETUP CHECKLIST (do these once, in order):
+## 1. Replace YOUR_GITHUB_USERNAME/YOUR_REPO_NAME below with your real
+##    GitHub repo, e.g. "jsmith/heatherton-cc-website".
+## 2. Deploy the OAuth login bridge (cms-oauth-worker.js) to Cloudflare
+##    Workers — see that file's own instructions.
+## 3. Replace YOUR_OAUTH_WORKER_URL below with the deployed Worker URL.
+## 4. To let a committee member log in and edit content, add them as a
+##    Collaborator on the GitHub repo (repo Settings -> Collaborators)
+##    with "Write" access. You (the repo owner) are automatically the
+##    super user — you can add/remove anyone's access at any time.
+## ------------------------------------------------------------------
+
+backend:
+  name: github
+  repo: YOUR_GITHUB_USERNAME/YOUR_REPO_NAME
+  branch: main
+  base_url: https://YOUR_OAUTH_WORKER_URL
+
+# Where uploaded photos get saved in the repo, and how they're referenced on the site
+media_folder: "content/uploads"
+public_folder: "/content/uploads"
+
+collections:
+  - name: "news"
+    label: "Club News"
+    description: "These cards show in the Latest from the Clubhouse section on the site."
+    files:
+      - name: "news"
+        label: "News Items"
+        file: "content/news.json"
+        fields:
+          - label: "News Items"
+            name: "items"
+            widget: "list"
+            summary: "{{title}}"
+            fields:
+              - {label: "Title", name: "title", widget: "string", hint: "Shown as the card headline"}
+              - {label: "Tag (small label, e.g. a date or category)", name: "tag", widget: "string", required: false}
+              - {label: "Excerpt", name: "excerpt", widget: "text"}
+              - {label: "Link (optional — e.g. a PlayHQ URL)", name: "link", widget: "string", required: false}
+
+  - name: "media"
+    label: "Media / Photos"
+    description: "These show as tiles in the Media section on the site."
+    files:
+      - name: "media"
+        label: "Media Items"
+        file: "content/media.json"
+        fields:
+          - label: "Media Items"
+            name: "items"
+            widget: "list"
+            summary: "{{type}} — {{caption}}"
+            fields:
+              - {label: "Type", name: "type", widget: "select", options: ["Photo", "Video"]}
+              - {label: "Image", name: "image", widget: "image", required: false, hint: "For videos, upload a thumbnail image"}
+              - {label: "Caption", name: "caption", widget: "string", required: false}
