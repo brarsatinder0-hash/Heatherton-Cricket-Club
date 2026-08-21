@@ -68,6 +68,7 @@
     --nav-glass: rgba(23,23,26,0.75);
     --placeholder-text: rgba(243,239,230,0.5);
     --logo-plate-bg: #f3efe6;
+    --hero-fade: #0e0e10;
     --font-display: 'Anton', sans-serif;
     --font-body: 'Inter', sans-serif;
     --font-mono: 'Roboto Mono', monospace;
@@ -79,13 +80,14 @@
     --red:#c8102e;
     --red-deep:#a30d25;
     --cream:#17171a;
-    --cream-dim:#5c574c;
+    --cream-dim:#524d42;
     --willow:#8a6a2f;
     --line: rgba(11,11,12,0.12);
     --dot-color: rgba(11,11,12,0.045);
     --watermark-filter: brightness(0.4) contrast(1.2);
     --nav-glass: rgba(255,255,255,0.85);
     --placeholder-text: rgba(11,11,12,0.3);
+    --hero-fade: #eae4d4;
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
@@ -278,7 +280,7 @@
     padding:110px 0 80px;
     background:
       radial-gradient(ellipse at 50% -10%, rgba(200,16,46,0.2), transparent 55%),
-      linear-gradient(180deg, var(--black), #0e0e10 100%);
+      linear-gradient(180deg, var(--black), var(--hero-fade) 100%);
     overflow:hidden;
     border-bottom:1px solid var(--line);
   }
@@ -308,8 +310,8 @@
   }
   .btn-primary{background:var(--red);color:var(--on-accent);}
   .btn-primary:hover{background:var(--red-deep);}
-  .btn-ghost{background:transparent;color:var(--cream);border:1px solid var(--line);}
-  .btn-ghost:hover{border-color:var(--willow);color:var(--willow);}
+  .btn-ghost{background:transparent;color:var(--red);border:1.5px solid var(--red);}
+  .btn-ghost:hover{background:var(--red);color:var(--on-accent);}
 
   /* scoreboard card */
   .scoreboard{
@@ -541,6 +543,17 @@
     font-family:var(--font-mono);letter-spacing:0.03em;
   }
   .footer-sitemap a:hover{color:var(--willow);}
+  .credit-row{justify-content:center;margin-top:24px;padding-top:0;border-top:none;}
+  .credit-badge{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--charcoal);border:1px solid var(--line);border-radius:20px;
+    padding:8px 16px;font-size:0.76rem;color:var(--cream-dim);
+    transition:border-color .2s, color .2s;
+  }
+  .credit-badge:hover{border-color:var(--willow);color:var(--willow);}
+  .credit-badge img{width:16px;height:16px;border-radius:4px;flex-shrink:0;background:var(--logo-plate-bg);}
+  .credit-badge strong{color:var(--cream);}
+  .credit-badge:hover strong{color:var(--willow);}
 
   /* WEATHER STRIP (top tab) */
   .weather-strip{
@@ -783,6 +796,25 @@
   .tw-rain{color:var(--red);font-weight:700;}
   .tw-note{font-size:0.78rem;color:var(--cream-dim);margin-top:16px;}
 
+  /* AI PITCH FORECAST */
+  .ai-verdict{
+    display:flex;align-items:center;gap:12px;
+    background:var(--charcoal-2);border-radius:12px;padding:14px 16px;margin-bottom:16px;
+    border-left:3px solid var(--willow);
+  }
+  .ai-verdict-icon{
+    width:32px;height:32px;border-radius:50%;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:1rem;
+  }
+  .ai-verdict.good .ai-verdict-icon{background:rgba(76,175,80,0.18);}
+  .ai-verdict.maybe .ai-verdict-icon{background:rgba(200,164,60,0.18);}
+  .ai-verdict.bad .ai-verdict-icon{background:rgba(200,16,46,0.18);}
+  .ai-verdict-text{font-size:0.85rem;line-height:1.4;}
+  .ai-verdict-tag{
+    font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.06em;text-transform:uppercase;
+    color:var(--willow);display:block;margin-bottom:3px;
+  }
+
   /* SCROLL REVEAL */
   .reveal{opacity:0;transform:translateY(22px);transition:opacity .55s ease, transform .55s ease;}
   .reveal.visible{opacity:1;transform:none;}
@@ -803,6 +835,76 @@
   }
   .back-to-top.visible{opacity:1;pointer-events:auto;transform:none;}
   .back-to-top:hover{background:var(--red-deep);}
+
+  /* CLUB ASSISTANT */
+  .assistant-fab{
+    position:fixed;bottom:22px;left:22px;z-index:150;
+    display:flex;align-items:center;gap:9px;
+    background:var(--charcoal);border:1px solid var(--line);color:var(--cream);
+    padding:12px 18px 12px 14px;border-radius:30px;cursor:pointer;
+    box-shadow:0 10px 24px rgba(0,0,0,0.35);
+    transition:border-color .2s, transform .2s;
+  }
+  .assistant-fab:hover{border-color:var(--willow);transform:translateY(-2px);}
+  .assistant-fab-label{font-size:0.84rem;font-weight:700;}
+  @media(max-width:600px){
+    .assistant-fab{bottom:16px;left:16px;padding:12px;}
+    .assistant-fab-label{display:none;}
+  }
+
+  .assistant-panel{
+    position:fixed;bottom:90px;left:22px;z-index:151;
+    width:340px;max-width:calc(100vw - 32px);max-height:70vh;
+    background:var(--charcoal);border:1px solid var(--line);border-radius:18px;
+    box-shadow:0 24px 50px -12px rgba(0,0,0,0.55);
+    display:flex;flex-direction:column;overflow:hidden;
+    opacity:0;transform:translateY(16px) scale(0.97);pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease;
+  }
+  .assistant-panel.open{opacity:1;transform:none;pointer-events:auto;}
+  .assistant-header{
+    display:flex;justify-content:space-between;align-items:flex-start;gap:10px;
+    padding:18px 18px 14px;border-bottom:1px solid var(--line);
+    background:linear-gradient(135deg, rgba(200,16,46,0.1), transparent);
+  }
+  .assistant-title{font-family:var(--font-display);font-size:1.1rem;text-transform:uppercase;}
+  .assistant-subtitle{font-size:0.76rem;color:var(--cream-dim);margin-top:4px;}
+  .assistant-close{background:none;border:none;color:var(--cream-dim);font-size:1rem;cursor:pointer;flex-shrink:0;padding:2px 4px;}
+  .assistant-close:hover{color:var(--cream);}
+  .assistant-body{padding:16px 18px 18px;overflow-y:auto;}
+  .assistant-input{
+    width:100%;padding:12px 14px;background:var(--black);border:1px solid var(--line);
+    border-radius:10px;color:var(--cream);font-family:var(--font-body);font-size:0.9rem;
+  }
+  .assistant-input:focus{outline:none;border-color:var(--willow);}
+  .assistant-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+  .assistant-chip{
+    background:var(--charcoal-2);border:1px solid var(--line);color:var(--cream-dim);
+    font-size:0.74rem;padding:6px 12px;border-radius:20px;cursor:pointer;
+  }
+  .assistant-chip:hover{border-color:var(--willow);color:var(--willow);}
+  .assistant-results{margin-top:14px;display:flex;flex-direction:column;gap:10px;}
+  .assistant-answer{
+    background:var(--charcoal-2);border-radius:12px;padding:12px 14px;font-size:0.85rem;line-height:1.55;
+  }
+  .assistant-answer .aq{font-weight:700;margin-bottom:6px;color:var(--willow);font-size:0.78rem;}
+  .assistant-answer a{color:var(--willow);text-decoration:underline;}
+  .assistant-empty{font-size:0.82rem;color:var(--cream-dim);text-align:center;padding:8px 4px;}
+
+  /* PLAYER FORM TRACKER */
+  .form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  @media(max-width:900px){.form-grid{grid-template-columns:1fr;}}
+  .form-card{
+    background:var(--charcoal);border:1px solid var(--line);border-left:3px solid var(--red);
+    border-radius:14px;padding:22px 24px;
+  }
+  .form-card-tag{
+    font-family:var(--font-mono);font-size:0.66rem;letter-spacing:0.06em;text-transform:uppercase;
+    color:var(--willow);margin-bottom:10px;
+  }
+  .form-card-player{font-family:var(--font-display);font-size:1.15rem;margin-bottom:6px;}
+  .form-card-detail{color:var(--cream-dim);font-size:0.86rem;line-height:1.5;}
+  .form-empty{color:var(--cream-dim);font-size:0.9rem;text-align:center;padding:30px 10px;grid-column:1/-1;}
   @media(max-width:600px){
     .back-to-top{bottom:16px;right:16px;width:42px;height:42px;}
   }
@@ -927,12 +1029,14 @@
           <li><a href="#fixtures">Fixtures</a></li>
           <li><a href="#training">Training</a></li>
           <li><a href="#team">Team</a></li>
+          <li><a href="#player-form">Player Form</a></li>
         </ul>
       </li>
       <li class="nav-parent">
         <a href="#news">News</a>
         <ul class="nav-sub">
           <li><a href="#news">Club News</a></li>
+          <li><a href="#match-reports">Match Reports</a></li>
           <li><a href="#media">Media</a></li>
           <li><a href="#world-news">World Cricket</a></li>
           <li><a href="#fun">Fun</a></li>
@@ -1170,6 +1274,10 @@
       </div>
       <div class="training-weather">
         <div class="tw-head">Next Training Sessions — Live Forecast</div>
+        <div class="ai-verdict" id="ai-play-verdict" style="display:none;">
+          <div class="ai-verdict-icon" id="ai-verdict-icon">🏏</div>
+          <div class="ai-verdict-text"><span class="ai-verdict-tag">AI Pitch Forecast</span><span id="ai-verdict-msg"></span></div>
+        </div>
         <div id="tw-cards">
           <div class="tw-card"><div class="tw-day">Loading forecast…</div></div>
         </div>
@@ -1215,6 +1323,36 @@
         <div class="player-photo">A&amp;A</div>
         <div class="player-info"><div class="player-name">Arun &amp; Ajay</div><div class="player-role">Sunday 2s Co-Captains</div></div>
       </div>
+    </div>
+  </div>
+</section>
+
+<div class="seam"><svg preserveAspectRatio="none" viewBox="0 0 1200 34"><path d="M0 17 Q 300 44 600 17 T 1200 17" fill="none" stroke="#c7a467" stroke-width="2" stroke-dasharray="6 8" opacity="0.5"/></svg></div>
+
+<section id="player-form">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">AI Form Tracker</div>
+      <h2>Player Form</h2>
+      <p>Automatically surfaced from match results entered by the committee — no manual write-ups needed.</p>
+    </div>
+    <div class="form-grid" id="form-grid">
+      <div class="form-empty">Once match results start coming in via the admin panel, standout form and streaks will show up here automatically.</div>
+    </div>
+  </div>
+</section>
+
+<div class="seam"><svg preserveAspectRatio="none" viewBox="0 0 1200 34"><path d="M0 17 Q 300 -10 600 17 T 1200 17" fill="none" stroke="#c8102e" stroke-width="2" stroke-dasharray="6 8" opacity="0.6"/></svg></div>
+
+<section id="match-reports">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">AI-Assisted Recaps</div>
+      <h2>Match Reports</h2>
+      <p>Auto-written from the stats the committee enters — no one has to sit down and draft these by hand.</p>
+    </div>
+    <div class="news-grid" id="match-reports-grid">
+      <div class="news-card"><div class="news-body"><div class="news-title">No match reports yet — these appear automatically once results are logged.</div></div></div>
     </div>
   </div>
 </section>
@@ -1573,11 +1711,37 @@
     <a href="#world-news">World Cricket</a>
     <a href="#fun">Fun &amp; Trivia</a>
   </div>
+  <div class="wrap credit-row">
+    <a href="https://ikshaconsulting.com/" target="_blank" rel="noopener" class="credit-badge">
+      <img src="https://www.google.com/s2/favicons?domain=ikshaconsulting.com&sz=32" alt="" loading="lazy">
+      <span>Website designed &amp; published by <strong>Iksha Consulting</strong></span>
+    </a>
+  </div>
 </footer>
 
 <button class="back-to-top" id="back-to-top" aria-label="Back to top">
   <svg viewBox="0 0 24 24" width="20" height="20"><line x1="12" y1="19" x2="12" y2="5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polyline points="5,12 12,5 19,12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
 </button>
+
+<button class="assistant-fab" id="assistant-fab" aria-label="Open Club Assistant">
+  <svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 2a9 9 0 00-9 9c0 1.8.53 3.47 1.44 4.87L3 21l5.34-1.4A9 9 0 1012 2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="8.5" cy="11" r="1.1" fill="currentColor"/><circle cx="12" cy="11" r="1.1" fill="currentColor"/><circle cx="15.5" cy="11" r="1.1" fill="currentColor"/></svg>
+  <span class="assistant-fab-label">Club Assistant</span>
+</button>
+
+<div class="assistant-panel" id="assistant-panel">
+  <div class="assistant-header">
+    <div>
+      <div class="assistant-title">Club Assistant</div>
+      <div class="assistant-subtitle">Ask about training, membership, fixtures &amp; more</div>
+    </div>
+    <button class="assistant-close" id="assistant-close" aria-label="Close">✕</button>
+  </div>
+  <div class="assistant-body">
+    <input type="text" class="assistant-input" id="assistant-input" placeholder="Type a question…" autocomplete="off">
+    <div class="assistant-chips" id="assistant-chips"></div>
+    <div class="assistant-results" id="assistant-results"></div>
+  </div>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v19.0"></script>
@@ -1698,6 +1862,109 @@
     }
   }
   loadMedia();
+
+  // MATCH REPORTS + PLAYER FORM — both generated automatically from the
+  // structured match stats the committee enters via /admin. Entirely
+  // template/rules-based (no hosted AI, no ongoing cost) — but it removes
+  // the "someone has to sit down and write this up" bottleneck each week.
+  const reportOpeners = {
+    Won: ["A strong performance saw", "It was a good day out as", "Job done as", "A well-earned win as"],
+    Lost: ["A tough outing as", "It wasn't to be as", "Despite a fight,", "A hard-fought loss as"],
+    Drawn: ["A tightly contested affair as", "Honours shared as", "Neither side could break through as"],
+    Abandoned: ["The match was called off with", "Conditions had the final say as"]
+  };
+  function ordinalNoise(i){ return ["", "also ", "meanwhile, "][i % 3]; }
+
+  function generateMatchReport(match){
+    const dateLabel = match.date ? new Date(match.date).toLocaleDateString('en-AU', {day:'numeric', month:'short', year:'numeric'}) : '';
+    const openers = reportOpeners[match.result] || ["Heatherton took the field as"];
+    const opener = openers[Math.abs((match.opponent||'').length) % openers.length];
+    let sentence = `${opener} Heatherton ${match.team} took on ${match.opponent}${match.venue ? ' at ' + match.venue : ''}, with the match ending in a ${match.result.toLowerCase()} result.`;
+
+    const perf = (match.performances || []).slice().sort((a,b)=> (b.runs||0) - (a.runs||0));
+    const topBat = perf.find(p=>p.runs >= 20);
+    const topBowl = (match.performances || []).slice().sort((a,b)=>(b.wickets||0)-(a.wickets||0))[0];
+
+    if(topBat){
+      sentence += ` ${topBat.name} led the way with the bat, top-scoring with ${topBat.runs} runs.`;
+    }
+    if(topBowl && topBowl.wickets >= 2){
+      sentence += ` ${topBowl.name} was the pick of the bowlers, finishing with ${topBowl.wickets} wickets.`;
+    }
+    return {title: `${match.team} ${match.result.toLowerCase()} vs ${match.opponent}`, dateLabel, sentence};
+  }
+
+  async function loadMatchesAndGenerate(){
+    const reportsGrid = document.getElementById('match-reports-grid');
+    const formGrid = document.getElementById('form-grid');
+    try{
+      const res = await fetch('content/matches.json', {cache:'no-store'});
+      if(!res.ok) throw new Error('matches.json fetch failed');
+      const data = await res.json();
+      const matches = (data.items || []).filter(m=>m.team && m.opponent && m.result);
+      if(!matches.length) return; // leave the "no reports yet" placeholders showing
+
+      // Sort newest first
+      matches.sort((a,b)=> new Date(b.date) - new Date(a.date));
+
+      // --- Match Reports ---
+      if(reportsGrid){
+        reportsGrid.innerHTML = matches.slice(0, 6).map(m=>{
+          const r = generateMatchReport(m);
+          return `<div class="news-card"><div class="news-img"></div><div class="news-body">
+            <div class="news-date">${r.dateLabel}</div>
+            <div class="news-title">${r.title}</div>
+            <div class="news-excerpt">${r.sentence}</div>
+          </div></div>`;
+        }).join('');
+      }
+
+      // --- Player Form insights ---
+      if(formGrid){
+        const allPerf = [];
+        matches.forEach(m=>{
+          (m.performances || []).forEach(p=>{
+            if(p.name) allPerf.push({...p, date: m.date, team: m.team});
+          });
+        });
+        if(!allPerf.length) return;
+
+        // Top run-scorer overall
+        const byRuns = allPerf.slice().sort((a,b)=>(b.runs||0)-(a.runs||0));
+        const topScorer = byRuns[0];
+
+        // Top wicket-taker overall
+        const byWickets = allPerf.slice().sort((a,b)=>(b.wickets||0)-(a.wickets||0));
+        const topBowler = byWickets[0];
+
+        // Streak detection: players with 2+ knocks of 30+ runs
+        const runTallies = {};
+        allPerf.forEach(p=>{
+          if((p.runs||0) >= 30){
+            runTallies[p.name] = (runTallies[p.name] || 0) + 1;
+          }
+        });
+        const inFormName = Object.keys(runTallies).find(name => runTallies[name] >= 2);
+
+        const cards = [];
+        if(topScorer && topScorer.runs > 0){
+          cards.push(`<div class="form-card"><div class="form-card-tag">Top Run-Scorer</div><div class="form-card-player">${topScorer.name}</div><div class="form-card-detail">${topScorer.runs} runs in their latest logged innings for ${topScorer.team}.</div></div>`);
+        }
+        if(topBowler && topBowler.wickets > 0){
+          cards.push(`<div class="form-card"><div class="form-card-tag">Top Wicket-Taker</div><div class="form-card-player">${topBowler.name}</div><div class="form-card-detail">${topBowler.wickets} wickets in their latest logged spell for ${topBowler.team}.</div></div>`);
+        }
+        if(inFormName){
+          cards.push(`<div class="form-card"><div class="form-card-tag">In Form</div><div class="form-card-player">${inFormName}</div><div class="form-card-detail">On a run of multiple 30+ scores across recent matches — one to watch this week.</div></div>`);
+        }
+        if(cards.length){
+          formGrid.innerHTML = cards.join('');
+        }
+      }
+    }catch(err){
+      // Leave placeholders showing — nothing logged yet or fetch failed
+    }
+  }
+  loadMatchesAndGenerate();
 
   // Contact form — simple math CAPTCHA + honeypot spam guard, then sends the email
   // directly in the background via FormSubmit (no backend of our own required).
@@ -1880,6 +2147,7 @@
       const data = await res.json();
       twCards.innerHTML = '';
       let anyLive = false;
+      let verdictSet = false;
       days.forEach(day=>{
         const dayStr = day.toISOString().slice(0,10);
         const idx = data.daily.time.indexOf(dayStr);
@@ -1896,6 +2164,12 @@
             <div class="tw-detail-row"><span>Temp</span><span>${min}° – ${max}°C</span></div>
             <div class="tw-detail-row"><span>Rain chance</span><span class="tw-rain">${rain}%</span></div>
             <div class="tw-detail-row"><span>Session</span><span>5:30 PM · Ross St Ground</span></div>`;
+
+          // AI Pitch Forecast — reasons over the nearest upcoming session's live data
+          if(!verdictSet){
+            verdictSet = true;
+            showAiVerdict(dateLabel, rain, max, min);
+          }
         } else {
           card.innerHTML = `<div class="tw-day">${dateLabel}</div>
             <div class="tw-detail-row"><span>Forecast</span><span>Available closer to the date</span></div>
@@ -1906,10 +2180,41 @@
       twNote.textContent = anyLive
         ? "Live forecast — updates automatically as training day approaches."
         : "Training season runs from 29 Sep 2026 to 15 Mar 2027. Detailed forecasts appear once each session is within range.";
+      if(!verdictSet){
+        document.getElementById('ai-play-verdict').style.display = 'none';
+      }
     }catch(err){
       twCards.innerHTML = '<div class="tw-card"><div class="tw-day">Forecast unavailable right now</div></div>';
     }
   }
+
+  // AI Pitch Forecast — a simple rules-based reasoning layer over live rain/temp
+  // data, giving players a plain-English read on whether training is likely to
+  // go ahead. Not a hosted AI model (no ongoing API cost) — a transparent,
+  // always-on heuristic tuned for outdoor cricket conditions.
+  function showAiVerdict(dateLabel, rain, max, min){
+    const box = document.getElementById('ai-play-verdict');
+    const icon = document.getElementById('ai-verdict-icon');
+    const msg = document.getElementById('ai-verdict-msg');
+    if(!box) return;
+    let level, text, emoji;
+    if(rain >= 60){
+      level = 'bad'; emoji = '🌧';
+      text = `Heavy rain chance (${rain}%) for ${dateLabel} — training may be called off. Keep an eye on the club's socials closer to the day.`;
+    } else if(rain >= 30 || max >= 36 || min <= 4){
+      level = 'maybe'; emoji = '⚠️';
+      const reason = rain >= 30 ? `a ${rain}% rain chance` : (max >= 36 ? `a forecast top of ${max}°C` : `a forecast low of ${min}°C`);
+      text = `Possible, but worth a check — ${reason} for ${dateLabel}. Bring wet-weather gear just in case.`;
+    } else {
+      level = 'good'; emoji = '✅';
+      text = `Good conditions expected for ${dateLabel} — ${min}–${max}°C with only a ${rain}% rain chance. Should be full steam ahead.`;
+    }
+    box.className = 'ai-verdict ' + level;
+    box.style.display = 'flex';
+    icon.textContent = emoji;
+    msg.textContent = text;
+  }
+
   loadTrainingWeather();
   setInterval(loadTrainingWeather, 30 * 60 * 1000);
 
@@ -2085,6 +2390,133 @@
     });
     backToTop.addEventListener('click', function(){
       window.scrollTo({top:0, behavior:'smooth'});
+    });
+  }
+
+  // CLUB ASSISTANT — instant answers from a built-in knowledge base.
+  // This runs entirely in the browser (no hosted AI model, no ongoing API
+  // cost, nothing sent off-site) — a lightweight, always-on smart search
+  // over the club's key facts, built to feel like asking a real assistant.
+  const clubKnowledge = [
+    {q:"When and where is training?", keywords:"training time day when session nets practice schedule", a:"Training is every <strong>Tuesday &amp; Thursday, 5:30 PM</strong>, from 29 Sep 2026 to 15 Mar 2027, at Ross St Ground, Heatherton. <a href=\"#training\">See the training calendar →</a>"},
+    {q:"How do I become a member?", keywords:"join member membership register registration sign up new player", a:"Head to the <a href=\"https://www.playhq.com/cricket-australia/org/heatherton-cricket-club/cf8b7f11/register\" target=\"_blank\" rel=\"noopener\">Become a Member</a> button up top — registration is handled through PlayHQ."},
+    {q:"How do I pay my subs?", keywords:"pay subs fees payment cost price money stripe", a:"Use the <strong>Pay Your Yearly Subs</strong> button in the hero section — it opens a secure Stripe checkout."},
+    {q:"Where is the ground?", keywords:"ground address location where map venue oval", a:"<strong>32-54 Ross St, Heatherton VIC 3202.</strong> <a href=\"#training\">See the map →</a>"},
+    {q:"What are the fixtures?", keywords:"fixtures matches games schedule ladder results next match", a:"Live fixtures and the ladder are managed on PlayHQ. <a href=\"#fixtures\">Jump to Fixtures →</a>"},
+    {q:"Who's on the committee?", keywords:"committee executive president secretary who runs the club board", a:"Nitin Gupta, Satinder Brar, Indresh Brar, Glenn McLean (VP &amp; Child Safety Officer), Ray Jopling and Gokul Vasudevan make up the Executive. <a href=\"#committee\">Meet the full committee →</a>"},
+    {q:"Who are the team captains?", keywords:"captain captains leader saturday sunday 1s 2s team leader", a:"Mani Bola (Saturday 1s), Gokul Vasudevan (Saturday 2s), Neeraj Raghav (Sunday 1s), and Arun &amp; Ajay (Sunday 2s co-captains). <a href=\"#team\">See the team →</a>"},
+    {q:"Does the club have a juniors program?", keywords:"junior juniors kids children youth program under age", a:"Yes — the junior cricket program launched in 2025, giving young players a dedicated pathway into the club."},
+    {q:"Does the club have a women's team?", keywords:"women womens ladies female team", a:"Yes — Heatherton fields a Women's XI, established in 2026."},
+    {q:"How do I contact the club?", keywords:"contact email phone reach get in touch enquiry", a:"Email <strong>cricketclubheatherton@gmail.com</strong>, or use the <a href=\"#contact\">Contact form →</a>"},
+    {q:"Who are the sponsors?", keywords:"sponsor sponsors partners support supporters", a:"Bendigo Bank, Advantage Group, 50 Acres RSL Cheltenham, My Therapy Group, Silver Sponge, RMBL, Gunpowder Social, Inverloch Motel and Sidhu Legal. <a href=\"#sponsors\">See all sponsors →</a>"},
+    {q:"Can I hire the function room?", keywords:"function room hire venue event party booking", a:"Yes — the function room overlooks the ground and can be hired for events. <a href=\"#function-room\">Enquire about hire →</a>"},
+    {q:"Is there a club shop?", keywords:"shop merchandise merch gear clothing buy cap shirt", a:"Yes — caps, shirts and training gear. <a href=\"https://www.niscsports.com.au/heathertoncc-shop\" target=\"_blank\" rel=\"noopener\">Visit the shop →</a>"},
+    {q:"How old is the club?", keywords:"history old founded established year 1879 heritage", a:"Heatherton CC was founded in <strong>1879</strong> as the Heatherton Freighters — one of Melbourne's oldest cricket clubs. <a href=\"#history\">Read the full history →</a>"},
+    {q:"Who are the Life Members?", keywords:"life members honour award legacy", a:"Alex Parr and Luke Sullivan (2022), and Nitin Gupta (2026). <a href=\"#life-members\">See Life Members →</a>"},
+    {q:"How many teams does the club have?", keywords:"teams how many senior mens grades", a:"Six teams: 4 senior men's teams, 1 women's team, and 1 juniors team."},
+    {q:"Where can I see match reports?", keywords:"match report recap result writeup summary", a:"Match reports are generated automatically from results the committee logs. <a href=\"#match-reports\">See Match Reports →</a>"},
+    {q:"Who's in good form right now?", keywords:"form streak top scorer wicket taker in form best player", a:"Check the Player Form section — it's updated automatically from match stats. <a href=\"#player-form\">See Player Form →</a>"}
+  ];
+  const assistantFab = document.getElementById('assistant-fab');
+  const assistantPanel = document.getElementById('assistant-panel');
+  const assistantClose = document.getElementById('assistant-close');
+  const assistantInput = document.getElementById('assistant-input');
+  const assistantResults = document.getElementById('assistant-results');
+  const assistantChips = document.getElementById('assistant-chips');
+
+  function openAssistant(){
+    assistantPanel.classList.add('open');
+    setTimeout(()=> assistantInput.focus(), 150);
+  }
+  function closeAssistant(){ assistantPanel.classList.remove('open'); }
+  if(assistantFab){
+    assistantFab.addEventListener('click', function(){
+      assistantPanel.classList.contains('open') ? closeAssistant() : openAssistant();
+    });
+  }
+  if(assistantClose) assistantClose.addEventListener('click', closeAssistant);
+  document.addEventListener('click', function(e){
+    if(assistantPanel && assistantPanel.classList.contains('open') &&
+       !assistantPanel.contains(e.target) && !assistantFab.contains(e.target)){
+      closeAssistant();
+    }
+  });
+
+  // Suggestion chips for the empty state
+  const suggestedTopics = ["Training times", "How to join", "Pay my subs", "Where's the ground?"];
+  if(assistantChips){
+    suggestedTopics.forEach(topic=>{
+      const chip = document.createElement('button');
+      chip.className = 'assistant-chip';
+      chip.textContent = topic;
+      chip.addEventListener('click', function(){
+        assistantInput.value = topic;
+        runAssistantSearch(topic);
+      });
+      assistantChips.appendChild(chip);
+    });
+  }
+
+  // Optional upgrade: once a real LLM-backed Worker is deployed (see
+  // llm-assistant-worker.js), set its URL here to let the assistant answer
+  // open-ended questions the built-in knowledge base can't match. Leave as
+  // 'PENDING_SETUP' to keep the assistant running on the free, local
+  // knowledge base only — nothing breaks either way.
+  const LLM_ASSISTANT_URL = 'PENDING_SETUP';
+  let assistantSearchToken = 0;
+
+  async function askLlmAssistant(query, token){
+    assistantResults.innerHTML = '<div class="assistant-empty">Thinking…</div>';
+    try{
+      const res = await fetch(LLM_ASSISTANT_URL, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({message: query})
+      });
+      if(token !== assistantSearchToken) return; // a newer search superseded this one
+      if(!res.ok) throw new Error('assistant request failed');
+      const data = await res.json();
+      assistantResults.innerHTML = `<div class="assistant-answer"><div class="aq">${query}</div>${data.answer || "Sorry, I couldn't find an answer to that."}</div>`;
+    }catch(err){
+      if(token !== assistantSearchToken) return;
+      assistantResults.innerHTML = '<div class="assistant-empty">No exact match — try the Contact form and the club will get back to you.</div>';
+    }
+  }
+
+  function runAssistantSearch(query){
+    const q = query.trim().toLowerCase();
+    assistantSearchToken++;
+    const token = assistantSearchToken;
+    if(!q){
+      assistantResults.innerHTML = '';
+      return;
+    }
+    const terms = q.split(/\s+/).filter(t=>t.length > 1);
+    const scored = clubKnowledge.map(entry=>{
+      const haystack = (entry.q + ' ' + entry.keywords).toLowerCase();
+      let score = 0;
+      terms.forEach(term=>{
+        if(haystack.includes(term)) score += 1;
+      });
+      if(haystack.includes(q)) score += 2;
+      return {entry, score};
+    }).filter(r=>r.score > 0).sort((a,b)=>b.score - a.score);
+
+    if(!scored.length){
+      if(LLM_ASSISTANT_URL && LLM_ASSISTANT_URL !== 'PENDING_SETUP'){
+        askLlmAssistant(query, token);
+      } else {
+        assistantResults.innerHTML = '<div class="assistant-empty">No exact match — try the Contact form and the club will get back to you.</div>';
+      }
+      return;
+    }
+    assistantResults.innerHTML = scored.slice(0, 3).map(r=>
+      `<div class="assistant-answer"><div class="aq">${r.entry.q}</div>${r.entry.a}</div>`
+    ).join('');
+  }
+  if(assistantInput){
+    assistantInput.addEventListener('input', function(){
+      runAssistantSearch(this.value);
     });
   }
 

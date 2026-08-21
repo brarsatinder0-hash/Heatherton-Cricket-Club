@@ -1,24 +1,9 @@
-## Heatherton CC — Admin (Decap CMS) config
-## ------------------------------------------------------------------
-## SETUP CHECKLIST (do these once, in order):
-## 1. Replace YOUR_GITHUB_USERNAME/YOUR_REPO_NAME below with your real
-##    GitHub repo, e.g. "jsmith/heatherton-cc-website".
-## 2. Deploy the OAuth login bridge (cms-oauth-worker.js) to Cloudflare
-##    Workers — see that file's own instructions.
-## 3. Replace YOUR_OAUTH_WORKER_URL below with the deployed Worker URL.
-## 4. To let a committee member log in and edit content, add them as a
-##    Collaborator on the GitHub repo (repo Settings -> Collaborators)
-##    with "Write" access. You (the repo owner) are automatically the
-##    super user — you can add/remove anyone's access at any time.
-## ------------------------------------------------------------------
-
 backend:
   name: github
-  repo: YOUR_GITHUB_USERNAME/YOUR_REPO_NAME
+  repo: brarsatinder0-hash/Heatherton-Cricket-Club
   branch: main
-  base_url: https://YOUR_OAUTH_WORKER_URL
+  base_url: https://curly-surf-114f.brarsatinder0.workers.dev
 
-# Where uploaded photos get saved in the repo, and how they're referenced on the site
 media_folder: "content/uploads"
 public_folder: "/content/uploads"
 
@@ -57,3 +42,31 @@ collections:
               - {label: "Type", name: "type", widget: "select", options: ["Photo", "Video"]}
               - {label: "Image", name: "image", widget: "image", required: false, hint: "For videos, upload a thumbnail image"}
               - {label: "Caption", name: "caption", widget: "string", required: false}
+
+  - name: "matches"
+    label: "Match Results"
+    description: "Enter basic stats after a match — the site automatically writes a match report and tracks player form from this."
+    files:
+      - name: "matches"
+        label: "Match Entries"
+        file: "content/matches.json"
+        fields:
+          - label: "Matches"
+            name: "items"
+            widget: "list"
+            summary: "{{team}} vs {{opponent}} — {{result}}"
+            fields:
+              - {label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false}
+              - {label: "Our Team", name: "team", widget: "select", options: ["Saturday 1s", "Saturday 2s", "Sunday 1s", "Sunday 2s"]}
+              - {label: "Opponent", name: "opponent", widget: "string"}
+              - {label: "Result", name: "result", widget: "select", options: ["Won", "Lost", "Drawn", "Abandoned"]}
+              - {label: "Venue", name: "venue", widget: "string", required: false}
+              - label: "Player Performances"
+                name: "performances"
+                widget: "list"
+                required: false
+                summary: "{{name}} — {{runs}} runs, {{wickets}} wkts"
+                fields:
+                  - {label: "Player Name", name: "name", widget: "string"}
+                  - {label: "Runs", name: "runs", widget: "number", value_type: "int", default: 0}
+                  - {label: "Wickets", name: "wickets", widget: "number", value_type: "int", default: 0}
